@@ -29,6 +29,8 @@ import MassageItem from '../components/MassageItem.vue';
 import InputItem from '../components/InputItem.vue';
 import Time from '../components/Time.vue';
 
+import baseService from '../service';
+
 // interface IMassage {
 //   avatar: string;
 //   name: string;
@@ -50,19 +52,18 @@ import Time from '../components/Time.vue';
 })
 export default class Chat extends Vue {
   // eslint-disable-next-line
-  chatList: List = {"-LP6Hv4D1_lNaLZSsi1i":{"avatar":"https://assets-cdn.github.com/images/modules/logos_page/Octocat.png","name":"Me","text":"Hi, morning","time":"1539868100"},"-LP6IBFlJe71HL2lQNiH":{"avatar":"https://vuejs.org/images/logo.png","name":"Vue","text":"Hi, this is vue","time":"1539868101"},"-LP6IRwU2PwWJarJ623A":{"avatar":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K","name":"React","text":"Hi, this is react","time":"1539868102"},"-LP6Ibiq7C8EzMhDlHdy":{"avatar":"https://assets-cdn.github.com/images/modules/logos_page/Octocat.png","name":"Me","text":"Nice to meet you!","time":"1539869100"},"-LP6Ives7JYDYBw8MdxV":{"avatar":"https://assets-cdn.github.com/images/modules/logos_page/Octocat.png","name":"Me","text":"How are you?","time":"1539869300"},"-LP6IzqYjG4Iul0Ky3iC":{"avatar":"https://assets-cdn.github.com/images/modules/logos_page/Octocat.png","name":"Me","text":"No response?","time":"1539879300"},"-LP6J5-pxvCe6Nl7IM9w":{"avatar":"https://vuejs.org/images/logo.png","name":"Vue","text":"haha","time":"1539879301"}};
+  // chatList: List = {"-LP6Hv4D1_lNaLZSsi1i":{"avatar":"https://assets-cdn.github.com/images/modules/logos_page/Octocat.png","name":"Me","text":"Hi, morning","time":"1539868100"},"-LP6IBFlJe71HL2lQNiH":{"avatar":"https://vuejs.org/images/logo.png","name":"Vue","text":"Hi, this is vue","time":"1539868101"},"-LP6IRwU2PwWJarJ623A":{"avatar":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K","name":"React","text":"Hi, this is react","time":"1539868102"},"-LP6Ibiq7C8EzMhDlHdy":{"avatar":"https://assets-cdn.github.com/images/modules/logos_page/Octocat.png","name":"Me","text":"Nice to meet you!","time":"1539869100"},"-LP6Ives7JYDYBw8MdxV":{"avatar":"https://assets-cdn.github.com/images/modules/logos_page/Octocat.png","name":"Me","text":"How are you?","time":"1539869300"},"-LP6IzqYjG4Iul0Ky3iC":{"avatar":"https://assets-cdn.github.com/images/modules/logos_page/Octocat.png","name":"Me","text":"No response?","time":"1539879300"},"-LP6J5-pxvCe6Nl7IM9w":{"avatar":"https://vuejs.org/images/logo.png","name":"Vue","text":"haha","time":"1539879301"}};
+  chatList: List | any = {};
 
-  beforeMount() {
-    this.randomMsg();
+  created() {
+    baseService.get({
+      action: 'fe-chat-test.json',
+    }).then((res) => {
+      this.chatList = res;
+      this.randomMsg();
+      console.log(res);
+    });
   }
-  // updated(){
-  //   this.$nextTick(() => {
-  //     const elem: HTMLElement | null = this.$el.querySelector(".content");
-  //     if (elem) elem.scrollTop = elem.scrollHeight;
-
-  //     // console.log(elem.scrollHeight)
-  //   })
-  // }
 
   compareMin(preTime: string, nextTime: string): number {
     const preTimeNum = Number(preTime) * 1000;

@@ -41,12 +41,12 @@ export default class Time extends Vue {
     else date = new Date();
 
     return {
-      year: date.getUTCFullYear(),
-      month: date.getUTCMonth(),
-      date: date.getUTCDate(),
-      hour: date.getUTCHours(),
-      minute: date.getUTCMinutes(),
-      second: date.getUTCSeconds(),
+      year: date.getFullYear(),
+      month: date.getMonth(),
+      date: date.getDate(),
+      hour: date.getHours(),
+      minute: date.getMinutes(),
+      second: date.getSeconds(),
       fullDate: date,
     };
   }
