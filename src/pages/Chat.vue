@@ -17,7 +17,7 @@
       </template>
     </div>
     <div class="foot">
-      <InputItem @send="insertMsg" />
+      <InputItem @send="manageMsg" />
     </div>
   </div>
 </template>
@@ -94,6 +94,7 @@ export default class Chat extends Vue {
 
   insertMsg(msg: IMassage): void {
     this.$set(this.chatList, `-LP6J5-pxvCe6Nl7IM9w${msg.time}`, msg);
+
     this.$nextTick(() => {
       const elem: HTMLElement | null = this.$el.querySelector('.content');
       if (elem) elem.scrollTop = elem.scrollHeight;
@@ -103,7 +104,7 @@ export default class Chat extends Vue {
   }
 
   randomMsg() {
-    setInterval(() => {
+    // setInterval(() => {
       const msg: IMassage = {
         avatar: 'https://vuejs.org/images/logo.png',
         name: 'Vue',
@@ -111,7 +112,14 @@ export default class Chat extends Vue {
         time: `${Math.round((new Date()).getTime() / 1000)}`,
       };
       this.insertMsg(msg);
-    }, 5000);
+    // }, 5000);
+  }
+  manageMsg(msg: IMassage) {
+    this.insertMsg(msg);
+    let id: number | undefined = setTimeout(() => {
+      this.randomMsg();
+      id = undefined;
+    }, 1000)
   }
 }
 </script>
