@@ -39,6 +39,7 @@ input {
   font-size: 1.2rem;
   line-height: 1.5rem;
   outline: none;
+  border: 0;
 }
 
 button {
